@@ -29,7 +29,6 @@ diskont = diskont'.  mt_rand(0, 2).';
 
 ';
 $bd = parse_ini_string($ini_string, true);
-//print_r($bd);
 
 /*
  * 
@@ -85,23 +84,19 @@ function discount_article($key, $value) {
     if (($key=='игрушка детская велосипед')&&($value['количество заказано']>=3)
         &&($value['количество заказано']<=$value['осталось на складе']))
     {
-//        echo 'Ваша скидка для этого товара - 30%<br>';
         $info['discount_flag'] = 0.3;
         return $info['discount_flag']*100;
     } else {
         switch ($value['diskont']) {
             case 'diskont0':
-//                echo 'Скидок для этого товара нет<br>';
                 $info['discount_flag'] = 0;
                 return $info['discount_flag']*100;
                 break;
             case 'diskont1':
-//                echo 'Ваша скидка для этого товара - 10%<br>';
                 $info['discount_flag'] = 0.1;
                 return $info['discount_flag']*100;
                 break;
             case 'diskont2':
-//                echo 'Ваша скидка для этого товара - 20%<br>';
                 $info['discount_flag'] = 0.2;
                 return $info['discount_flag']*100;
                 break;
@@ -111,8 +106,6 @@ function discount_article($key, $value) {
     }
 }
 
-// Вывод корзины
-// 1) Перечень заказанных товаров, их цену, кол-во и остаток на складе
 ?>
 
 <table border="1">
@@ -145,12 +138,9 @@ foreach ($bd as $key => $value) {
   
 <?php    
 
-echo sklad_info($key, $value, $info['itogo']);
+sklad_info($key, $value, $info['itogo']);
     
 }
-
-// ИТОГО 
-// сколько всего наименовний было заказано, каково общее количество товара, какова общая сумма заказа
 
 ?>   
 </table>
@@ -160,7 +150,6 @@ echo sklad_info($key, $value, $info['itogo']);
 echo '<h3>ИТОГО:</h3>';
 echo 'Заказано '.$info['i'].' товара в общем количестве '.$info['kolichestvo'].' шт. В сумме к оплате <b>'.$info['itogo']. ' $</b>'; 
 
-// Уведомления
 if ($info['sklad_ok']){
     echo '<h3>Уведомления:</h3>';
     echo $info['sklad_ok'];
