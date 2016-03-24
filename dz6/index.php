@@ -1,74 +1,29 @@
 <?php
 
-// Печать формы объявления
+// Печать формы 
 function show_ads(){
-    ?>
-    <form  method="post", align="center">
-    <div>
-        <input type="radio" value="1" name="private" checked="">Частное лицо 
-        <input type="radio" value="0" name="private">Компания <br><br>
-    </div>
-    <div><b>Ваше имя: </b><input type="text" value="" name="seller_name" maxlength="40"><br><br></div>
-    <div>Электронная почта: <input type="text" value="" name="email"><br><br></div>
-    <div> 
-        <input type="checkbox" value="1" name="allow_mails">
-        <span>Я не хочу получать вопросы по объявлению по e-mail</span><br><br>
-    </div>
-    <div>Номер телефона <input type="text" value="" name="phone"><br><br></div>
-    <div>Город 
-        <select title="Выберите Ваш город" name="location_id"> 
-            <option value="">-- Выберите город --</option>
-            <option disabled="disabled">-- Города --</option>
-            <?php
-            $citys = array('641780' => 'Новосибирск','641490' => 'Барабинск','641510' => 'Бердск','641600' => 'Искитим', 
-                            '641630' => 'Колывань','641680' => 'Краснообск','641710' => 'Куйбышев','641760' => 'Мошково');
-            foreach ($citys as $number => $city) {
-                echo '<option value="'.$number.'">'.$city.'</option>';  
-            }
-            ?>
-        </select><br><br>
-    </div>
-    <div>Категория 
-        <select title="Выберите категорию объявления" name="category_id"> 
-            <option value="">-- Выберите категорию --</option>
-            <?php
-            $category = array('Транспорт','Недвижимость','Работа','Услуги','Личные вещи','Для дома и дачи','Бытовая электроника','Прочее');
-            foreach ($category as $key => $volume) {
-                echo '<option value="'.$key.'">'.$volume.'</option>';  
-            }
-            ?>
-        </select><br><br>
-    </div>
-    <div>Название объявления <input type="text" value="" name="title" maxlength="50"><br><br></div>
-    <div>Описание объявления <textarea name="description" maxlength="3000"></textarea><br><br></div>
-    <div>Цена <input type="text" value="0" name="price" maxlength="9">&nbsp;<span>руб.</span><br><br></div>
-    <div><input type="submit" value="Далее" name="main_form_submit"><br><br></div>
-    </form>
-<?php
-}
-
-// Печать формы выбранного объявления
-function show_my_ad($mas){
+    $args = func_get_args();
+    $mas = isset($args[0]) ? $args[0] : '';
     ?>
     <form  method="post", align="center">
     <div>
     <?php           
-        if ($mas['private']==1) {
+        if (isset($mas['private']) && ($mas['private']==1)) {
     ?>
-        <input type="radio" value="1" name="private" checked="">Частное лицо 
-        <input type="radio" value="0" name="private">Компания <br><br>  
+        <input type="radio" value="0" name="private" >Частное лицо 
+        <input type="radio" value="1" name="private" checked="">Компания <br><br>  
         </div>
     <?php
         } else {
     ?>
-        <input type="radio" value="1" name="private" >Частное лицо 
-        <input type="radio" value="0" name="private" checked="">Компания <br><br>
+        <input type="radio" value="0" name="private" checked="">Частное лицо 
+        <input type="radio" value="1" name="private" >Компания <br><br>
         </div>
     <?php    
         }
     ?>
-    <div><b>Ваше имя: </b><input type="text" <?php echo 'value="'.$mas['seller_name'].'" '; ?> name="seller_name" maxlength="40"><br><br></div>
-    <div>Электронная почта: <input type="text" <?php echo 'value="'.$mas['email'].'" '; ?> name="email"><br><br></div>
+    <div><b>Ваше имя: </b><input type="text" value="<?= isset($mas['seller_name']) ? $mas['seller_name'] : ''; ?>" name="seller_name" maxlength="40"><br><br></div>
+    <div>Электронная почта: <input type="text" value="<?= isset($mas['email']) ? $mas['email'] : ''; ?>" name="email"><br><br></div>
     <div> 
         <?php           
         if (isset($mas['allow_mails'])) {
@@ -83,7 +38,7 @@ function show_my_ad($mas){
         ?>
         <span>Я не хочу получать вопросы по объявлению по e-mail</span><br><br>
     </div>
-    <div>Номер телефона <input type="text" <?php echo 'value="'.$mas['phone'].'" '; ?> name="phone"><br><br></div>
+    <div>Номер телефона <input type="text" value="<?= isset($mas['phone']) ? $mas['phone'] : ''; ?>" name="phone"><br><br></div>
     <div>Город 
         <select title="Выберите Ваш город" name="location_id"> 
             <option value="">-- Выберите город --</option>
@@ -92,7 +47,8 @@ function show_my_ad($mas){
             $citys = array('641780' => 'Новосибирск','641490' => 'Барабинск','641510' => 'Бердск','641600' => 'Искитим', 
                             '641630' => 'Колывань','641680' => 'Краснообск','641710' => 'Куйбышев','641760' => 'Мошково');
             foreach ($citys as $number => $city) {
-                $check = ($number==$mas['location_id']) ? 'selected=""' : '';
+                $location_id = isset($mas['location_id']) ? $mas['location_id'] : ''; 
+                $check = ($number == $location_id) ? 'selected=""' : '';
                 echo '<option value="'.$number.'" '.$check.'>'.$city.'</option>';
             }
             ?>
@@ -104,15 +60,16 @@ function show_my_ad($mas){
             <?php
             $category = array('Транспорт','Недвижимость','Работа','Услуги','Личные вещи','Для дома и дачи','Бытовая электроника','Прочее');
             foreach ($category as $key => $volume) {
-                $check = ($key==$mas['category_id']) ? 'selected=""' : '';
-                echo '<option value="'.$key.'" '.$key.'>'.$volume.'</option>';  
+                $category_id = isset($mas['category_id'])? $mas['category_id'] : '';
+                $check = (($category_id != null) && ($key == $category_id)) ? 'selected=""' : '';
+                echo '<option value="'.$key.'" '.$check.'>'.$volume.'</option>';  
             }
             ?>
         </select><br><br>
     </div>
-    <div>Название объявления <input type="text" <?php echo 'value="'.$mas['title'].'" '; ?> name="title" maxlength="50"><br><br></div>
-    <div>Описание объявления <textarea name="description" maxlength="3000"><?php echo $mas['description']; ?></textarea><br><br></div>
-    <div>Цена <input type="text" <?php echo 'value="'.$mas['price'].'" '; ?> name="price" maxlength="9">&nbsp;<span>руб.</span><br><br></div>
+    <div>Название объявления <input type="text" value="<?= isset($mas['title']) ? $mas['title'] : ''; ?>" name="title" maxlength="50"><br><br></div>
+    <div>Описание объявления <textarea name="description" maxlength="3000"><?= isset($mas['description']) ? $mas['description'] : ''; ?></textarea><br><br></div>
+    <div>Цена <input type="text" value="<?= isset($mas['price']) ? $mas['price'] : ''; ?>" name="price" maxlength="9">&nbsp;<span>руб.</span><br><br></div>
     <div><input type="submit" value="Далее" name="main_form_submit"><br><br></div>
     </form>
 <?php
@@ -141,7 +98,7 @@ if (isset($_GET['delete'])){
 
 // Вывод формы объявления
 if (isset($_GET['id'])){
-    show_my_ad($_SESSION['ads'][$_GET['id']]);
+    show_ads($_SESSION['ads'][$_GET['id']]);
 } else {
     show_ads();
 }
@@ -149,6 +106,7 @@ if (isset($_GET['id'])){
 // Список объявлений
 echo '<hr>';
 echo '<h2><center>Объявления</center></h2><br>';
+
 if (!empty($_SESSION['ads'])) {
     foreach ($_SESSION as $ads) {
         foreach ($ads as $key => $value) {
