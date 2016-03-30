@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
 
 require_once 'functions.php';
 
@@ -7,22 +6,10 @@ require_once 'functions.php';
 session_start();
 
 // Добавление объявления в сессию
-if (isset($_POST['main_form_submit'])){
-    $_SESSION['ads'][uniqid()] = $_POST;
-    unset($_POST);
-    header("Location: index.php");
-}
+add_ad();
 
 // Удаление объявления
-if (isset($_GET['delete'])){
-    if ($_GET['delete']==0){
-        unset($_SESSION['ads']);
-        header("Location: index.php"); 
-    } else {
-        unset($_SESSION['ads'][$_GET['delete']]);
-        header("Location: index.php");
-    }
-}
+delete_ads();
 
 // Вывод формы объявления
 if (isset($_GET['id'])){
@@ -35,21 +22,7 @@ if (isset($_GET['id'])){
 echo '<hr>';
 echo '<h2><center>Объявления</center></h2><br>';
 
-if (!empty($_SESSION['ads'])) {
-    foreach ($_SESSION as $ads) {
-        foreach ($ads as $key => $value) {
-            echo '<ul><center><li><a href="?id='.$key.'">'.$value['title'] 
-                 .'</a>  | '.$value['price'].' руб. | '.$value['seller_name']
-                 .' | <a href="?delete='.$key. '">Удалить</a></li></center></ul>';
-        }
-    }
-    
-    print ('<a href="?delete=0"><center><br>Удалить все объявления</center></a><br>');
-    
-} else {
-    echo '<center>Объявлений нет</center>';
-}
-
+print_ads();
 
 ?>
 

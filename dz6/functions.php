@@ -73,3 +73,40 @@ function show_ads(){
     </form>
 <?php
 }
+
+function print_ads() {
+    if (!empty($_SESSION['ads'])) {
+    foreach ($_SESSION as $ads) {
+        foreach ($ads as $key => $value) {
+            echo '<ul><center><li><a href="?id='.$key.'">'.$value['title'] 
+                 .'</a>  | '.$value['price'].' руб. | '.$value['seller_name']
+                 .' | <a href="?delete='.$key. '">Удалить</a></li></center></ul>';
+        }
+    }
+    
+    print ('<a href="?delete=0"><center><br>Удалить все объявления</center></a><br>');
+    
+} else {
+    echo '<center>Объявлений нет</center>';
+}    
+}
+
+function delete_ads() {
+    if (isset($_GET['delete'])) {
+        if ($_GET['delete'] == 0) {
+            unset($_SESSION['ads']);
+            header("Location: index.php");
+        } else {
+            unset($_SESSION['ads'][$_GET['delete']]);
+            header("Location: index.php");
+        }
+    }
+}
+
+function add_ad() {
+    if (isset($_POST['main_form_submit'])) {
+        $_SESSION['ads'][uniqid()] = $_POST;
+        unset($_POST);
+        header("Location: index.php");
+    }
+}
