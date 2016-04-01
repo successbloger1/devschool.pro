@@ -8,19 +8,39 @@
  * 2) dz7_2.php Сохранять объявления в файлах
  */
 
+define('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
+define('FILE_NAME', 'ads.txt');
+
 require_once './functions_files.php';
 
-if (isset($_GET['id'])) {
-    show_ads($_GET['id']);
-} else {
-    show_ads();
+if (isset($_GET['delete'])) {
+    delete_ads();
 }
 
-add_ad();
+if (!empty($_POST)) {
 
-delete_ads();
+    if (isset($_POST['new'])) {
+        header('Location: ' . SCRIPT_NAME);
+    } else {
+
+        $valid = validation($_POST);
+        $valid_err = $valid['err'];
+        $valid_post = $valid['valid'];
+
+        if (!empty($valid_err)) {
+            show_ads($valid_post, $valid_err);
+        } else {
+            add_ad($valid_post);
+        }
+    }
+} else {
+    if (isset($_GET['id'])) {
+        show_ads($_GET['id']);
+    } else {
+        show_ads();
+    }
+}
 
 // Список объявлений
-echo '<hr>';
 echo '<h2><center>Объявления</center></h2><br>';
 print_ads();

@@ -1,179 +1,192 @@
 <?php
 
-define('FILE_NAME', 'ads.txt');
-
-function show_ads(){
+function show_ads() {
     $args = func_get_args();
-    
+
     if (isset($args[0])) {
-        $id = $args[0];
-        if (file_exists(FILE_NAME) && filesize(FILE_NAME)) {
-            $file = file(FILE_NAME);
-            $mas = '';
-            
-            for ($i = 0; $i < sizeof($file); $i++) {
-                $ads = unserialize($file[$i]);
-                foreach ($ads as $key => $value) {
-                    if ($key == $id) {
-                        $mas = $value;
-                    } 
+        if (is_array($args[0])) {
+            $mas = $args[0];
+            $err = $args[1];
+        } else {
+
+            $id = $args[0];
+
+            if (file_exists(FILE_NAME) && filesize(FILE_NAME)) {
+                $file = file(FILE_NAME);
+                $mas = '';
+
+                for ($i = 0; $i < sizeof($file); $i++) {
+                    $ads = unserialize($file[$i]);
+                    foreach ($ads as $key => $value) {
+                        if ($key == $id) {
+                            $mas = $value;
+                        }
+                    }
                 }
             }
         }
     } else {
         $mas = '';
     }
-?>
-    <form  method="post", align="center">
-    <div>
-    <?php           
-        if (isset($mas['private']) && ($mas['private']==1)) {
-    ?>
-        <input type="radio" value="0" name="private" >Частное лицо 
-        <input type="radio" value="1" name="private" checked="">Компания <br><br>  
-        </div>
-    <?php
-        } else {
-    ?>
-        <input type="radio" value="0" name="private" checked="">Частное лицо 
-        <input type="radio" value="1" name="private" >Компания <br><br>
-        </div>
-    <?php    
-        }
-    ?>
-    <div><b>Ваше имя: </b><input type="text" value="<?= isset($mas['seller_name']) ? $mas['seller_name'] : ''; ?>" name="seller_name" maxlength="40"><br><br></div>
-    <div>Электронная почта: <input type="text" value="<?= isset($mas['email']) ? $mas['email'] : ''; ?>" name="email"><br><br></div>
-    <div> 
-        <?php           
-        if (isset($mas['allow_mails'])) {
-        ?>
-        <input type="checkbox" checked="" name="allow_mails">
-        <?php    
-        } else {
-        ?>
-        <input type="checkbox" name="allow_mails">
-        <?php    
-        }
-        ?>
-        <span>Я не хочу получать вопросы по объявлению по e-mail</span><br><br>
-    </div>
-    <div>Номер телефона <input type="text" value="<?= isset($mas['phone']) ? $mas['phone'] : ''; ?>" name="phone"><br><br></div>
-    <div>Город 
-        <select title="Выберите Ваш город" name="location_id"> 
-            <option value="">-- Выберите город --</option>
-            <option disabled="disabled">-- Города --</option>
-            <?php
-            $citys = array('641780' => 'Новосибирск','641490' => 'Барабинск','641510' => 'Бердск','641600' => 'Искитим', 
-                            '641630' => 'Колывань','641680' => 'Краснообск','641710' => 'Куйбышев','641760' => 'Мошково');
-            foreach ($citys as $number => $city) {
-                $location_id = isset($mas['location_id']) ? $mas['location_id'] : ''; 
-                $check = ($number == $location_id) ? 'selected=""' : '';
-                echo '<option value="'.$number.'" '.$check.'>'.$city.'</option>';
-            }
-            ?>
-        </select><br><br>
-    </div>
-    <div>Категория 
-        <select title="Выберите категорию объявления" name="category_id"> 
-            <option value="">-- Выберите категорию --</option>
-            <?php
-            $category = array('Транспорт','Недвижимость','Работа','Услуги','Личные вещи','Для дома и дачи','Бытовая электроника','Прочее');
-            foreach ($category as $key => $volume) {
-                $category_id = isset($mas['category_id'])? $mas['category_id'] : '';
-                $check = (($category_id != null) && ($key == $category_id)) ? 'selected=""' : '';
-                echo '<option value="'.$key.'" '.$check.'>'.$volume.'</option>';  
-            }
-            ?>
-        </select><br><br>
-    </div>
-    <div>Название объявления <input type="text" value="<?= isset($mas['title']) ? $mas['title'] : ''; ?>" name="title" maxlength="50"><br><br></div>
-    <div>Описание объявления <textarea name="description" maxlength="3000"><?= isset($mas['description']) ? $mas['description'] : ''; ?></textarea><br><br></div>
-    <div>Цена <input type="text" value="<?= isset($mas['price']) ? $mas['price'] : ''; ?>" name="price" maxlength="9">&nbsp;<span>руб.</span><br><br></div>
-    <div><input type="submit" value="Далее" name="main_form_submit"><br><br></div>
-    </form>
-<?php
+    require_once('form.php');
 }
 
 function print_ads() {
     if (file_exists(FILE_NAME) && filesize(FILE_NAME)) {
 
         if (!$handle = fopen(FILE_NAME, 'r')) {
-            echo 'Не могу открыть файл '. FILE_NAME;
+            echo 'Не могу открыть файл ' . FILE_NAME;
             exit;
         }
-        
+
         while (!feof($handle)) {
             $buffer = fgets($handle);
-            if($buffer) {
+            if ($buffer) {
                 $ads[] = unserialize($buffer);
-            } 
+            }
         }
 
         fclose($handle);
-
+        $i = 0;
+        
         foreach ($ads as $mas) {
             foreach ($mas as $id => $ad) {
-            echo '<ul><center><li><a href="?id=' . $id . '">' . $ad['title']
-            . '</a>  | ' . $ad['price'] . ' руб. | ' . $ad['seller_name']
-            . ' | <a href="?delete=' . $id . '">Удалить</a></li></center></ul>';
+                echo '<center>'.++$i.' | <a href="?id=' . $id . '">' . $ad['title']
+                . '</a>  | ' . $ad['price'] . ' руб. | ' . $ad['seller_name']
+                . ' | <a href="?delete=' . $id . '">Удалить</a>';
+            }
         }
-        }
-        print ('<a href="?delete=0"><center><br>Удалить все объявления</center></a><br>');
+        echo '<center><a href="?delete=0"><br>Удалить все объявления</a></center><br>';
     } else {
         echo '<center>Объявлений нет</center>';
     }
 }
 
 function delete_ads() {
-    if (isset($_GET['delete'])) {
-        if ($_GET['delete'] == '0') {
-            unlink(FILE_NAME);
-            header("Location: dz7_2.php");
-        } else {
-            $file = file(FILE_NAME);
-            
-            for($i=0; $i<sizeof($file); $i++) {
-                $ads = unserialize($file[$i]);
-                if (key($ads) == $_GET['delete']){
-                    unset ($file[$i]);
+    if ($_GET['delete'] == '0') {
+        unlink(FILE_NAME);
+    } else {
+        $file = file(FILE_NAME);
+
+        for ($i = 0; $i < sizeof($file); $i++) {
+            $ads = unserialize($file[$i]);
+            foreach ($ads as $key => $value) {
+                if ($key == $_GET['delete']) {
+                    unset($file[$i]);
                 }
             }
-
-            if (!$handle = fopen(FILE_NAME, 'w')) {
-                echo 'Не могу открыть файл ' . FILE_NAME;
-                exit;
-            }
-            
-            fputs($handle, implode('', $file));
-            fclose($handle);
-            header("Location: dz7_2.php");
         }
+
+        file_put_contents (FILE_NAME, $file);
     }
+    header('Location: ' . SCRIPT_NAME);
 }
 
-function add_ad() {
-    if (isset($_POST['main_form_submit'])) {
+function save_ad($data) {
 
-        if (!$handle = fopen(FILE_NAME, 'a')) {
-            echo 'Не могу открыть файл '. FILE_NAME;
-            exit;
+    $file = file(FILE_NAME);
+    $id = $_GET['id'];
+    
+    for ($i = 0; $i < sizeof($file); $i++) {
+        $ads = unserialize($file[$i]);
+        foreach ($ads as $key => $value) {
+            if ($key == $id) {
+                $ads[$id] = $data;
+                $file[$i] = serialize($ads)."\n";
+            }
         }
-        
-        $ad[uniqid()] = $_POST;
+    }
+
+    file_put_contents (FILE_NAME, $file);
+
+}
+
+
+function add_ad($data) {
+
+    if (isset($_POST['create'])) {
+
+        $ad[uniqid()] = $data;
 
         $content = serialize($ad);
         $content .= "\n";
 
-        if (fwrite($handle, $content) === FALSE) {
-            echo 'Не могу сохранить в файл '. FILE_NAME;
-            exit;
-        }
-
-        fclose($handle);
-        
-        unset($_POST);
-        header("Location: dz7_2.php");
+        file_put_contents (FILE_NAME, $content, FILE_APPEND);
     }
+    
+    if (isset($_POST['save'])) {
+        save_ad($data);
+    }
+
+    unset($_POST);
+    header('Location: ' . SCRIPT_NAME);
+}
+
+function validation($form_data){
+    
+    $err = '';
+    
+    foreach ($form_data as $key => $value) {
+        $value = trim($value); // Убираем пробелы по краям
+        if (get_magic_quotes_gpc()) {
+            $value = stripslashes($value); //Убираем слеши, если надо  
+        }
+        $value = htmlspecialchars($value, ENT_QUOTES); //Заменяем служебные символы HTML на эквиваленты  
+        $form_data[$key] = $value;
+    }
+
+    $private = (int) $form_data['private'];
+
+    $seller_name = $form_data['seller_name'];
+    if (empty($seller_name)) {
+        $err .= 'Поле "Имя" обязательно для заполнения<br/>';
+    }
+
+    $email = $form_data['email'];
+    if (!preg_match('/^[-0-9a-z_\.]+@[-0-9a-z^\.]+\.[a-z]{2,4}$/i', $email) && !empty($email)) {
+        $err .= 'Неверный Email<br/>';
+    }
+
+    $allow_mails = isset($form_data['allow_mails']) ? $form_data['allow_mails'] : '';
+
+    $phone = $form_data['phone'];
+    if (!preg_match('/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/', $phone) && !empty($phone)) {
+        $err .= 'Неверный телефонный номер<br/>';
+    }
+
+    $location_id = (int) $form_data['location_id'];
+    $category_id = (int) $form_data['category_id'];
+
+    $title = $form_data['title'];
+    if (empty($title)) {
+        $err .= 'Поле "Название" обязательно для заполнения<br/>';
+    }
+    
+    $description = $form_data['description'];
+
+    $price = $form_data['price'];
+    if (empty($price)) {
+        $err .= 'Поле "Цена" обязательно для заполнения<br/>';
+    }
+    if (!preg_match('/^(?:\d+|\d*\.\d+)$/', $price) && !empty($price)) {
+        $err .= 'Неверно указана цена<br/>';
+    }
+
+    return $valid = [ 
+        'err' => $err,
+        'valid' => [
+            'private' => $private,
+            'seller_name' => $seller_name,
+            'email' => $email,
+            'allow_mails' => $allow_mails,
+            'phone' => $phone,
+            'location_id' => $location_id,
+            'category_id' => $category_id,
+            'title' => $title,
+            'description' => $description,
+            'price' => $price,
+        ]
+    ];
 }
 
     ?>

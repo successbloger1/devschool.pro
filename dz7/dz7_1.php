@@ -8,23 +8,41 @@
  * 1) dz7_1.php Сохранять объявления в Cookie и выставить время жизни - неделю
  */
 
-// каждое объявление 1 кука 
-// require_once './functions_cookie.php'; 
+define('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
 
 // все объявления в 1 куке
 require_once './functions_cookie_2.php';
 
-if (isset($_GET['id'])) {
-    show_ads($_GET['id']);
-} else {
-    show_ads();
+if (isset($_GET['delete'])) {
+    delete_ads();
 }
 
-add_ad();
+if (!empty($_POST)) {
 
-delete_ads();
+    if (isset($_POST['new'])) {
+        header('Location: ' . SCRIPT_NAME);
+    } else {
+
+        $valid = validation($_POST);
+        $valid_err = $valid['err'];
+        $valid_post = $valid['valid'];
+
+        if (!empty($valid_err)) {
+            show_ads($valid_post, $valid_err);
+        } else {
+            add_ad($valid_post);
+        }
+    }
+} else {
+    if (isset($_GET['id'])) {
+        show_ads($_GET['id']);
+    } else {
+        show_ads();
+    }
+}
 
 // Список объявлений
-echo '<hr>';
 echo '<h2><center>Объявления</center></h2><br>';
 print_ads();
+
+
