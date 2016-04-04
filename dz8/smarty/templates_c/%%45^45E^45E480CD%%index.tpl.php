@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-04-04 10:38:59
+<?php /* Smarty version 2.6.25-dev, created on 2016-04-04 13:57:16
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('function', 'html_options', 'index.tpl', 37, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('function', 'html_options', 'index.tpl', 31, false),)), $this); ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => 'header.tpl', 'smarty_include_vars' => array()));
 $this->_tpl_vars = $_smarty_tpl_vars;
@@ -11,15 +11,9 @@ unset($_smarty_tpl_vars);
    <DIV class="main"> 
         <form  method="post" align="center"> 
             <div class="field">
-                <?php if (( $this->_tpl_vars['mas']['private'] == 1 )): ?> 
-                    <input type="radio" value="0" name="private" id="mr"><label class="formLabelAuto">Частное лицо</label>
-                    <input type="radio" value="1" name="private" id="mr" checked=""><label class="formLabelAuto">Компания</label>
+                <input type="radio" value="0" name="private" id="mr" <?php if ($this->_tpl_vars['mas']['private'] == 0): ?> checked="" <?php endif; ?>><label class="formLabelAuto">Частное лицо</label>
+                <input type="radio" value="1" name="private" id="mr" <?php if ($this->_tpl_vars['mas']['private'] == 1): ?> checked="" <?php endif; ?>><label class="formLabelAuto">Компания</label>
             </div>
-                <?php else: ?>
-                    <input type="radio" value="0" name="private" id="mr" checked=""><label class="formLabelAuto">Частное лицо</label>
-                    <input type="radio" value="1" name="private" id="mr"><label class="formLabelAuto">Компания</label>
-            </div>
-                <?php endif; ?>   
             <div class="field">
                 <label>Ваше имя </label><span>*</span>
                 <input type="text" value="<?php echo $this->_tpl_vars['mas']['seller_name']; ?>
@@ -70,10 +64,10 @@ unset($_smarty_tpl_vars);
             </div>
             <div class="field">
                 <?php if (! empty ( $this->_tpl_vars['mas'] ) && isset ( $_GET['id'] )): ?>
-                    <input type="submit" value="Создать новое" name="new">
                     <input type="submit" value="Сохранить" name="save">
+                    <input type="submit" value="Создать новое" name="new">
                 <?php else: ?> 
-                    <input type="submit" value="Создать" name="create">
+                    <input  type="submit" value="Создать" name="create">
                 <?php endif; ?>    
             </div>
             <div class="field">
@@ -107,9 +101,7 @@ if ($this->_foreach['print']['total'] > 0):
  | <a href="?delete=<?php echo $this->_tpl_vars['id']; ?>
 ">Удалить</a>
                 <?php endforeach; endif; unset($_from); ?> 
-                
             </center>
-            
         <?php endforeach; endif; unset($_from); ?> 
             <br>
             <center>

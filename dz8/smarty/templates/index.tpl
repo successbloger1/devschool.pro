@@ -3,15 +3,9 @@
    <DIV class="main"> 
         <form  method="post" align="center"> 
             <div class="field">
-                {if ($mas.private == 1)} 
-                    <input type="radio" value="0" name="private" id="mr"><label class="formLabelAuto">Частное лицо</label>
-                    <input type="radio" value="1" name="private" id="mr" checked=""><label class="formLabelAuto">Компания</label>
+                <input type="radio" value="0" name="private" id="mr" {if $mas.private == 0} checked="" {/if}><label class="formLabelAuto">Частное лицо</label>
+                <input type="radio" value="1" name="private" id="mr" {if $mas.private == 1} checked="" {/if}><label class="formLabelAuto">Компания</label>
             </div>
-                {else}
-                    <input type="radio" value="0" name="private" id="mr" checked=""><label class="formLabelAuto">Частное лицо</label>
-                    <input type="radio" value="1" name="private" id="mr"><label class="formLabelAuto">Компания</label>
-            </div>
-                {/if}   
             <div class="field">
                 <label>Ваше имя </label><span>*</span>
                 <input type="text" value="{$mas.seller_name}" name="seller_name" maxlength="40">
@@ -54,10 +48,10 @@
             </div>
             <div class="field">
                 {if !empty($mas) && isset($smarty.get.id)}
-                    <input type="submit" value="Создать новое" name="new">
                     <input type="submit" value="Сохранить" name="save">
+                    <input type="submit" value="Создать новое" name="new">
                 {else} 
-                    <input type="submit" value="Создать" name="create">
+                    <input  type="submit" value="Создать" name="create">
                 {/if}    
             </div>
             <div class="field">
@@ -78,9 +72,7 @@
                     <a href="?id={$id}">{$info.title}</a> | {$info.price} руб. | 
                     {$info.seller_name} | <a href="?delete={$id}">Удалить</a>
                 {/foreach} 
-                
             </center>
-            
         {/foreach} 
             <br>
             <center>
