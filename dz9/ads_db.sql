@@ -5,10 +5,6 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP DATABASE IF EXISTS `ads_db`;
-CREATE DATABASE `ads_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `ads_db`;
-
 DROP TABLE IF EXISTS `ads`;
 CREATE TABLE `ads` (
   `id` varchar(20) NOT NULL,
