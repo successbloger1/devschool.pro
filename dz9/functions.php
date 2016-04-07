@@ -1,8 +1,8 @@
 <?php
 
-function db_connect() {
-    $conn = mysql_connect(DB_HOST, DB_USER,DB_PASS) or die("Невозможно установить соединение: ". mysql_error());
-    mysql_select_db (DB_NAME, $conn) or die("Невозможно выбрать базу данных: ". mysql_error());
+function db_connect($server_name, $user_name, $password, $database) {
+    $conn = mysql_connect($server_name, $user_name, $password) or die("Невозможно установить соединение: ". mysql_error());
+    mysql_select_db ($database, $conn) or die("Невозможно выбрать базу данных: ". mysql_error());
     mysql_set_charset('utf8') or die("Невозможно сменить кодировку: ". mysql_error());
 }
 

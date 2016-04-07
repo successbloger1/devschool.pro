@@ -22,10 +22,3 @@ $smarty->template_dir = './smarty/templates/';
 $smarty->compile_dir = './smarty/templates_c/';
 $smarty->cache_dir = './smarty/cache/';
 $smarty->config_dir = './smarty/configs/';
-
-// ---------- Configuration DB ----------
-
-define ('DB_HOST', 'localhost');
-define ('DB_USER', 'admin');
-define ('DB_PASS', '123');
-define ('DB_NAME', 'ads_db');
