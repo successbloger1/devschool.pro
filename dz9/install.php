@@ -21,13 +21,11 @@ if (isset($_POST['install'])) {
 
         if (mysql_connect($server_name, $user_name, $password)) {
 
-            if (mysql_select_db($database)) {
-                $sql = "DROP DATABASE $database";
-                if (!mysql_query($sql)) $err .= 'Ошибка при удалении базы данных: ' . mysql_error() . "<br>";
+            if ((!mysql_select_db($database)) && (mysql_errno() == 1049)) {
+                    $sql = "CREATE DATABASE $database";
+                    if (!mysql_query($sql)) $err .= 'Ошибка при создании базы данных: ' . mysql_error() . "<br>";
             }
-            
-            $sql = "CREATE DATABASE $database";
-            if (!mysql_query($sql)) $err .= 'Ошибка при создании базы данных: ' . mysql_error() . "<br>";
+
             if (!mysql_select_db($database)) $err .= 'Ошибка при выборе базы данных: ' . mysql_error() . "<br>";
             
             $damp = file_get_contents('ads_db.sql');
