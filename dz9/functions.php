@@ -1,11 +1,12 @@
 <?php
 
 function db_connect($server_name, $user_name, $password, $database) {
-    $conn = mysql_connect($server_name, $user_name, $password) or die("Невозможно установить соединение: ". mysql_error());
-    mysql_select_db ($database, $conn) or die("Невозможно выбрать базу данных: ". mysql_error());
+    mysql_connect($server_name, $user_name, $password) or die("Невозможно установить соединение: ". mysql_error());
+    mysql_select_db ($database) or die("Невозможно выбрать базу данных: ". mysql_error());
     mysql_set_charset('utf8') or die("Невозможно сменить кодировку: ". mysql_error());
 }
 
+// Доработать
 function form_construct($query) {
 
     $data_query = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
@@ -30,28 +31,21 @@ function form_data() {
             $mas = array_merge($mas, $err);
         } else {
             $id = $args[0];
-            $query = "SELECT id, private, seller_name, email, allow_mails, phone, location_id, category_id, title, description, price "
-                    . "FROM ads "
-                    . "WHERE id = '$id'";
+            $query = "SELECT * FROM ads WHERE id = '$id'";
             $ad_query = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
             $mas = mysql_fetch_assoc($ad_query);
             array_merge($mas, array('err' => ''));
         }
         
     } else {
-        $mas = array(
-            'private' => 0,
-            'seller_name' => '',
-            'email' => '',
-            'allow_mails' => '',
-            'phone' => '',
-            'location_id' => 0,
-            'category_id' => 0,
-            'title' => '',
-            'description' => '',
-            'price' => '',
-            'err' => ''
-        );
+        $query = "SHOW COLUMNS FROM ads";
+        $result = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
+        $mas = array();
+        if (mysql_num_rows($result) > 0) {
+            while ($row = mysql_fetch_assoc($result)) {
+                $mas += array($row['Field'] => $row['Default']);
+            }
+        }
     }
 
     return $mas;
@@ -59,7 +53,7 @@ function form_data() {
 
 function print_ads() {
     
-    $query = "SELECT id, private, seller_name, email, allow_mails, phone, location_id, category_id, title, description, price FROM ads";
+    $query = "SELECT * FROM ads";
     
     $ads_query = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
     
@@ -81,26 +75,25 @@ function print_ads() {
 function delete_ads() {
     if ($_GET['delete'] == '0') {
         $query = "TRUNCATE TABLE ads";
-        mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
     } else {
         $delete = mysql_real_escape_string($_GET['delete']);
-        
         $query = "DELETE FROM ads WHERE id = '$delete'";
-        mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
     }
+    mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
+    
     header('Location: ' . SCRIPT_NAME);
 }
 
 function save_ad($data) {
 
     $id = mysql_real_escape_string($_GET['id']);
+    $into_query = '';
     
-    $query = "UPDATE ads "
-            . "SET private = $data[private], seller_name = '$data[seller_name]', "
-            . "email = '$data[email]', allow_mails = '$data[allow_mails]', phone = '$data[phone]', "
-            . "location_id = $data[location_id], category_id = $data[category_id], "
-            . "title = '$data[title]', description = '$data[description]', price = $data[price] "
-            . "WHERE id = '$id'";
+    foreach ($data as $key => $value) {
+        $into_query .= "$key = '$value', ";
+    }
+
+    $query = "UPDATE ads SET ".rtrim($into_query, ', ')." WHERE id = '$id'";
     mysql_query($query) or die("Невозможно выполнить запрос <$query>. Ошибка: " . mysql_error());
 }
 
@@ -109,8 +102,7 @@ function add_ad($data) {
     if (isset($_POST['create'])) {
 
             $array_val = array_merge(array('id' => uniqid()), $data);
-            $query = "INSERT INTO ads (id, private, seller_name, email, allow_mails, phone, location_id, category_id, title, description, price) "
-                    . "VALUES ("."'".implode('\', \'', $array_val)."'".")";
+            $query = "INSERT INTO ads VALUES ("."'".implode('\', \'', $array_val)."'".")";
 
             mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: '. mysql_error());
         }

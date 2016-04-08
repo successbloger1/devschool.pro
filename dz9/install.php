@@ -15,9 +15,7 @@ if (isset($_POST['install'])) {
         }
     }
 
-    if (!empty($err)) {
-        header('Location : install.php');
-    } else {
+    if (empty($err)) {
 
         if (mysql_connect($server_name, $user_name, $password)) {
 

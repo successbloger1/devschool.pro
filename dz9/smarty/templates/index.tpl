@@ -55,7 +55,7 @@
                 {/if}    
             </div>
             <div class="field">
-                {if !empty($mas.err)}
+                {if isset($mas.err) && !empty($mas.err)}
                     <span>{$mas.err}</span>
                 {/if}    
             </div> 
