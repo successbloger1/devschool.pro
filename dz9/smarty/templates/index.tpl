@@ -65,13 +65,26 @@
     <h2><center>Объявления</center></h2><br>
     
     {if is_array($print_ads)}
-        
+        <center>
+        <table>
+            <tr>
+                <th width="40px">#</th>
+                <th><a href="?sort=title">Название</a></th>
+                <th><a href="?sort=price">Цена</a></th>
+                <th>Имя</th>
+                <th></th>
+            </tr>
         {foreach from=$print_ads item=ad name=print}
-            <center>{$smarty.foreach.print.iteration} | 
-                    <a href="?id={$ad.id}">{$ad.title}</a> | {$ad.price} руб. | 
-                    {$ad.seller_name} | <a href="?delete={$ad.id}">Удалить</a>
-            </center>
+            <tr>
+                <td align="center">{$smarty.foreach.print.iteration}</td>
+                <td><a href="?id={$ad.id}">{$ad.title}</a></td>
+                <td>{$ad.price} руб.</td>
+                <td>{$ad.seller_name}</td>
+                <td><a href="?delete={$ad.id}">Удалить</a></td>
+            </tr>    
         {/foreach} 
+        </table>
+        </center>
             <br>
             <center>
                 <a href="?delete=0"><br>Удалить все объявления</a>

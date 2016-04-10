@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-04-06 07:59:24
+<?php /* Smarty version 2.6.25-dev, created on 2016-04-10 08:15:37
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('function', 'html_options', 'index.tpl', 31, false),)), $this); ?>
@@ -71,7 +71,7 @@ unset($_smarty_tpl_vars);
                 <?php endif; ?>    
             </div>
             <div class="field">
-                <?php if (! empty ( $this->_tpl_vars['mas']['err'] )): ?>
+                <?php if (isset ( $this->_tpl_vars['mas']['err'] ) && ! empty ( $this->_tpl_vars['mas']['err'] )): ?>
                     <span><?php echo $this->_tpl_vars['mas']['err']; ?>
 </span>
                 <?php endif; ?>    
@@ -82,23 +82,36 @@ unset($_smarty_tpl_vars);
     <h2><center>Объявления</center></h2><br>
     
     <?php if (is_array ( $this->_tpl_vars['print_ads'] )): ?>
-        
+        <center>
+        <table>
+            <tr>
+                <th width="40px">#</th>
+                <th><a href="?sort=title">Название</a></th>
+                <th><a href="?sort=price">Цена</a></th>
+                <th>Имя</th>
+                <th></th>
+            </tr>
         <?php $_from = $this->_tpl_vars['print_ads']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }$this->_foreach['print'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['print']['total'] > 0):
     foreach ($_from as $this->_tpl_vars['ad']):
         $this->_foreach['print']['iteration']++;
 ?>
-            <center><?php echo $this->_foreach['print']['iteration']; ?>
- | 
-                    <a href="?id=<?php echo $this->_tpl_vars['ad']['id']; ?>
+            <tr>
+                <td align="center"><?php echo $this->_foreach['print']['iteration']; ?>
+</td>
+                <td><a href="?id=<?php echo $this->_tpl_vars['ad']['id']; ?>
 "><?php echo $this->_tpl_vars['ad']['title']; ?>
-</a> | <?php echo $this->_tpl_vars['ad']['price']; ?>
- руб. | 
-                    <?php echo $this->_tpl_vars['ad']['seller_name']; ?>
- | <a href="?delete=<?php echo $this->_tpl_vars['ad']['id']; ?>
-">Удалить</a>
-            </center>
+</a></td>
+                <td><?php echo $this->_tpl_vars['ad']['price']; ?>
+ руб.</td>
+                <td><?php echo $this->_tpl_vars['ad']['seller_name']; ?>
+</td>
+                <td><a href="?delete=<?php echo $this->_tpl_vars['ad']['id']; ?>
+">Удалить</a></td>
+            </tr>    
         <?php endforeach; endif; unset($_from); ?> 
+        </table>
+        </center>
             <br>
             <center>
                 <a href="?delete=0"><br>Удалить все объявления</a>

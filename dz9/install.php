@@ -7,12 +7,12 @@ if (isset($_POST['install'])) {
     $err = '';
 
     foreach ($_POST as $form_key => $form_value) {
-        if (!empty($form_value)) {
+//        if (!empty($form_value)) {
             $$form_key = trim($form_value);
             $smarty->assign("$form_key", $$form_key);
-        } else {
-            $err = 'Все поля обязательны для заполнения<br>';
-        }
+//        } else {
+//            $err = 'Все поля обязательны для заполнения<br>';
+//        }
     }
 
     if (empty($err)) {

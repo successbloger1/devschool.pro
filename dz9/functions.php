@@ -51,24 +51,40 @@ function form_data() {
     return $mas;
 }
 
+function sort_ads ($sort) {
+    
+    $i = isset($_COOKIE['i']) ? (int)$_COOKIE['i'] : 0;
+    $type = ($i%2) ? 'DESC' : 'ASC';
+    $query = "SELECT * FROM ads ORDER BY $sort $type";
+    setcookie('i', ++$i);
+
+    return $query;
+}
+
 function print_ads() {
-    
-    $query = "SELECT * FROM ads";
-    
-    $ads_query = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
-    
-    if (mysql_num_rows($ads_query) != 0) {
+    $args = func_get_args();
+    if (isset($args[0])) {
         
-        while ($ads_temp = mysql_fetch_assoc($ads_query)) {
-            $ads[] = $ads_temp;
-        }
-        
-        mysql_free_result($ads_query);
+        $sort = mysql_real_escape_string($args[0]);
+        $query = sort_ads($sort);
         
     } else {
-        $ads = '';
+        $query = "SELECT * FROM ads";
     }
 
+    $ads_query = mysql_query($query) or die('Невозможно выполнить запрос. Ошибка: ' . mysql_error());
+
+        if (mysql_num_rows($ads_query) != 0) {
+
+            while ($ads_temp = mysql_fetch_assoc($ads_query)) {
+                $ads[] = $ads_temp;
+            }
+
+            mysql_free_result($ads_query);
+        } else {
+            $ads = '';
+        }
+    
     return $ads;
 }
 

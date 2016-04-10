@@ -41,8 +41,11 @@ if (!empty($_POST)) {
 
 $smarty->assign('citys', form_construct(LOCATION_QUERY));
 $smarty->assign('category', form_construct(CATEGORY_QUERY));
-
-$smarty->assign('print_ads', print_ads());
+if (isset($_GET['sort'])) {
+    $smarty->assign('print_ads', print_ads($_GET['sort']));
+} else {
+    $smarty->assign('print_ads', print_ads());
+}
 
 mysql_close();
 
