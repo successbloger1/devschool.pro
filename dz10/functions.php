@@ -69,7 +69,8 @@ function delete_ads() {
     } else {
         $db->query('DELETE FROM ads WHERE id = ?', $_GET['delete']);
     }
-
+    
+    header('Location: ' . SCRIPT_NAME);
 }
 
 
