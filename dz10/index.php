@@ -18,11 +18,7 @@ if (isset($_GET['delete'])) {
 }
 
 if (!empty($_POST)) {
-
-    if (isset($_POST['new'])) {
-        header('Location: ' . SCRIPT_NAME);
-    } else {
-
+    if (!isset($_POST['new'])) {
         $valid = validation($_POST);
 
         if (!empty($valid['err'])) {
@@ -30,6 +26,7 @@ if (!empty($_POST)) {
         } else {
             add_ad($valid['valid']);
         }
+        
     }
 } else {
     if (isset($_GET['id'])) {

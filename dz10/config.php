@@ -1,7 +1,7 @@
 <?php
 
 //Включаем отображение ошибок
-error_reporting(E_ERROR|E_NOTICE|E_PARSE|E_WARNING);
+error_reporting(E_ERROR|E_NOTICE|E_PARSE/*|E_WARNING*/);
 ini_set('display_erorrs', 1);
 
 define('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);

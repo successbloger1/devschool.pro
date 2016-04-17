@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
    <DIV class="main"> 
-        <form  method="post" align="center"> 
+        <form  method="post" align="center" name="form"> 
             <div class="field">
                 <input type="radio" value="0" name="private" id="mr" {if $mas.private == 0} checked="" {/if}><label class="formLabelAuto">Частное лицо</label>
                 <input type="radio" value="1" name="private" id="mr" {if $mas.private == 1} checked="" {/if}><label class="formLabelAuto">Компания</label>
@@ -49,7 +49,7 @@
             <div class="field">
                 {if !empty($mas) && isset($smarty.get.id)}
                     <input type="submit" value="Сохранить" name="save">
-                    <input type="submit" value="Создать новое" name="new">
+                    <input type="submit" value="Создать новое" formaction="index.php"  name="new">
                 {else} 
                     <input  type="submit" value="Создать" name="create">
                 {/if}    

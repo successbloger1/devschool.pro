@@ -70,7 +70,6 @@ function delete_ads() {
         $db->query('DELETE FROM ads WHERE id = ?', $_GET['delete']);
     }
 
-    header('Location: ' . SCRIPT_NAME);
 }
 
 
@@ -94,9 +93,10 @@ function add_ad($data) {
     if (isset($_POST['save'])) {
         save_ad($data);
     }
-
+    
     unset($_POST);
     header('Location: ' . SCRIPT_NAME);
+
 }
 
 function validation($form_data){

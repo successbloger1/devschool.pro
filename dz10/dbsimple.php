@@ -4,7 +4,6 @@
 require_once "./dbsimple/config.php";
 require_once "DbSimple/Generic.php";
 
-
 // Подключаемся к БД.
 $db = DbSimple_Generic::connect("mysqli://$user_name:$password@$server_name/$database");
 
@@ -18,9 +17,11 @@ function databaseErrorHandler($message, $info)
     if (!error_reporting()) return;
     // Выводим подробную информацию об ошибке.
     echo "SQL Error: $message<br><pre>"; 
-    print_r($info);
+    if ($info['code'] == 1049 || $info['code'] == 1045 || $info['code'] == 2005 ){
+        echo "Произвести установку снова: <a href='install.php'>Install</a>";
+    }
     echo "</pre>";
-    exit();
+    exit;
 }
 
 // Подключаем логирование запросов

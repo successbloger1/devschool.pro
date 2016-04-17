@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-04-10 08:15:37
+<?php /* Smarty version 2.6.25-dev, created on 2016-04-17 12:29:49
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('function', 'html_options', 'index.tpl', 31, false),)), $this); ?>
@@ -9,7 +9,7 @@ unset($_smarty_tpl_vars);
  ?>
 
    <DIV class="main"> 
-        <form  method="post" align="center"> 
+        <form  method="post" align="center" name="form"> 
             <div class="field">
                 <input type="radio" value="0" name="private" id="mr" <?php if ($this->_tpl_vars['mas']['private'] == 0): ?> checked="" <?php endif; ?>><label class="formLabelAuto">Частное лицо</label>
                 <input type="radio" value="1" name="private" id="mr" <?php if ($this->_tpl_vars['mas']['private'] == 1): ?> checked="" <?php endif; ?>><label class="formLabelAuto">Компания</label>
@@ -65,7 +65,7 @@ unset($_smarty_tpl_vars);
             <div class="field">
                 <?php if (! empty ( $this->_tpl_vars['mas'] ) && isset ( $_GET['id'] )): ?>
                     <input type="submit" value="Сохранить" name="save">
-                    <input type="submit" value="Создать новое" name="new">
+                    <input type="submit" value="Создать новое" formaction="index.php"  name="new">
                 <?php else: ?> 
                     <input  type="submit" value="Создать" name="create">
                 <?php endif; ?>    
