@@ -7,11 +7,7 @@ if (file_exists('db.php')){
 }
 
 require_once 'config.php';
-require_once 'dbsimple.php';
-
-require 'Ad.php';
-require 'AdsStore.php';
-
+require_once 'autoload.php';
 
 // ------------------------------------------------------------
 
