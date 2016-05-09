@@ -61,10 +61,24 @@ console.log($text);
 //Задание 4
 $book1 = {'title' : 'Лайфхак на каждый день', 'author' : 'Фарид Каримов', 'pages' : 190};
 $book2 = {'title' : 'Важные годы. Почему не стоит откладывать жизнь на потом', 'author' : 'Мэг Джей', 'pages' : 270};
-$books = [$book1, $book2];
 
-$text = 'Недавно я прочитал книги '+$books[0]['title']+' и '+$books[1]['title']+', написанные соответственно авторами '
-    +$books[0]['author']+' и '+$books[1]['author']+', я осилил в сумме '+(function (a, b){ return a+b })($books[0]['pages'], $books[1]['pages'])
+function Books ($book1, $book2){
+    this.book1 = $book1;
+    this.book2 = $book2;
+}
+
+Books.prototype.out = function () {
+    console.log(this.book1);
+    console.log(this.book2);
+
+}
+
+books = new Books($book1, $book2);
+
+books.out();
+
+$text = 'Недавно я прочитал книги '+books.book1['title']+' и '+books.book2['title']+', написанные соответственно авторами '
+    +books.book1['author']+' и '+books.book2['author']+', я осилил в сумме '+(function (a, b){ return a+b })(books.book1['pages'], books.book2['pages'])
     +' страниц, не ожидал от себя подобного.';
 
 console.log($text);
