@@ -68,18 +68,13 @@ function Books ($book1, $book2){
 }
 
 Books.prototype.out = function () {
-    console.log(this.book1);
-    console.log(this.book2);
-
+	var $text = 'Недавно я прочитал книги '+this.book1['title']+' и '+this.book2['title']+', написанные соответственно авторами '
+    +this.book1['author']+' и '+this.book2['author']+', я осилил в сумме '+(function (a, b){ return a+b })(this.book1['pages'], this.book2['pages'])
+    +' страниц, не ожидал от себя подобного.';
+    
+    console.log($text);
 }
 
 books = new Books($book1, $book2);
 
 books.out();
-
-$text = 'Недавно я прочитал книги '+books.book1['title']+' и '+books.book2['title']+', написанные соответственно авторами '
-    +books.book1['author']+' и '+books.book2['author']+', я осилил в сумме '+(function (a, b){ return a+b })(books.book1['pages'], books.book2['pages'])
-    +' страниц, не ожидал от себя подобного.';
-
-console.log($text);
-
