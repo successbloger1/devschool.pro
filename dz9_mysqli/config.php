@@ -23,3 +23,14 @@ $smarty->compile_dir = './smarty/templates_c/';
 $smarty->cache_dir = './smarty/cache/';
 $smarty->config_dir = './smarty/configs/';
 
+// ---------- Configuration DB ----------
+
+$mysqli = new mysqli($server_name, $user_name, $password, $database);
+if ($mysqli->connect_errno) {
+    echo 'Не удалось подключиться к MySQL: ' . $mysqli->connect_error;
+    exit;
+}
+if (!$mysqli->set_charset("utf8")) {
+    echo 'Не удалось установить кодировку: ' . $mysqli->error;
+    exit;
+}

@@ -1,26 +1,5 @@
 <?php
 
-function db_connect($server_name, $user_name, $password, $database) {
-    global $mysqli;
-    
-    $mysqli = new mysqli($server_name, $user_name, $password, $database);
-    if ($mysqli->connect_errno) {
-        echo 'Не удалось подключиться к MySQL: ' . $mysqli->connect_error;
-        exit;
-    }
-    if (!$mysqli->set_charset("utf8")){
-        echo 'Не удалось установить кодировку: ' . $mysqli->error;
-        exit;
-    }
-
-}
-
-function db_disconnect() {
-    global $mysqli;
-    
-    $mysqli->close();
-}
-
 // Доработать
 function form_construct($query) {
     global $mysqli;
@@ -34,7 +13,7 @@ function form_construct($query) {
         $data += array($data_temp['id'] => $data_temp['name']);
     }
     $data_query->free();
-    
+
     return $data;
     
 }
@@ -76,12 +55,12 @@ function form_data() {
             }
         }
     }
-
+    
     return $mas;
 }
 
 function sort_ads ($sort) {
-    
+
     $i = isset($_COOKIE['i']) ? (int)$_COOKIE['i'] : 0;
     $type = ($i%2) ? 'DESC' : 'ASC';
     $query = "SELECT * FROM ads ORDER BY $sort $type";

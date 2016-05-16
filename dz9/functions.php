@@ -58,6 +58,8 @@ function sort_ads ($sort) {
     $query = "SELECT * FROM ads ORDER BY $sort $type";
     setcookie('i', ++$i);
 
+    var_dump($i);
+    
     return $query;
 }
 

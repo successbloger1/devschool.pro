@@ -1,17 +1,17 @@
 <?php
 
-require_once './config.php';
-require_once './functions.php';
-
 if (file_exists('db.php')){
     require_once './db.php';
 } else {
     header('Location: install.php');
 }
 
-// ------------------------------------------------------------
+require_once './config.php';
+require_once './functions.php';
 
-db_connect($server_name, $user_name, $password, $database);
+// ------------------------------------------------------------
+//
+//db_connect($server_name, $user_name, $password, $database);
 
 if (isset($_GET['delete'])) {
     delete_ads();
@@ -48,7 +48,7 @@ if (isset($_GET['sort'])) {
     $smarty->assign('print_ads', print_ads());
 }
 
-db_disconnect();
+$mysqli->close();
 
 // ------------------------------------------------------------
 
