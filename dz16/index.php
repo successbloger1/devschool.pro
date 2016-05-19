@@ -7,6 +7,7 @@ if (file_exists('db.php')){
 }
 
 require_once 'config.php';
+require_once 'dbsimple.php';
 
 // ------------------------------------------------------------
 
