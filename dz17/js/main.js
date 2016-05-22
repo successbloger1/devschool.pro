@@ -1,10 +1,17 @@
+function clean() {
+    $(':input', '#ajax-form')
+            .not(':button, :submit, :reset')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+    $("select option:first-child").prop('selected', true);
+    $('input[id = radio1]').prop('checked', true);
+    
+    $('.buttons').html('<button name="create" id="undefined">Создать</button>');
+}
+
 onload = function () {
-    $('form :checked').each(function () {
-        this.selected = false;
-        this.checked = false;
-    });
-    $('form').trigger('reset');
-    $('input[id = radio1]').prop('checked', true);  
+    clean(); 
 }
 
 $(document).ready(function () {
@@ -24,12 +31,7 @@ $(document).ready(function () {
             $('#container').fadeIn('slow');
         } else {
             $('#container').hide();
-            $('form :checked').each(function () {
-                this.selected = false;
-                this.checked = false;
-            });
-            $('form').trigger('reset');
-            $('input[id = radio1]').prop('checked', true);  
+            clean(); 
             
             if ($('tr:has(button[id=' + response.id + '])').length > 0) {
                 var num = $('tr:has(button[id=' + response.id + ']) td:first').html();
@@ -39,7 +41,7 @@ $(document).ready(function () {
                         + response.id + '" class="delete btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></button> '
                         + ' <button type="button" id="' + response.id + '" class="edit btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>');
 
-                $('.buttons').html('<button name="create" id="' + response.id + '">Создать</button>');
+                $('.buttons').html('<button name="create" id="undefined">Создать</button>');
 
                 console.log('edited ad with id = ' + response.id);
             } else {
@@ -122,6 +124,8 @@ $(document).ready(function () {
                     console.log(response.status);
                     tr.fadeOut('slow', function () {
                         $(this).remove();
+                        
+                        clean(); 
                     });
                 });
 
@@ -140,6 +144,8 @@ $(document).ready(function () {
                 function (response) {
                     console.log(response.status);
                     delTable();
+                    
+                    clean(); 
                 });
     });
 

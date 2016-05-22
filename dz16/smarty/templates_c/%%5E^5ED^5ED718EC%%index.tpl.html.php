@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-05-18 10:03:06
+<?php /* Smarty version 2.6.25-dev, created on 2016-05-22 04:11:46
          compiled from index.tpl.html */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => 'header.tpl.html', 'smarty_include_vars' => array()));
@@ -15,7 +15,7 @@ unset($_smarty_tpl_vars);
     </div>
     
     <h2><center>Форма объявления</center></h2>
-    <form role="form" class="form-horizontal" method="post" action="javascript:void(null);">
+    <form id="form" role="form" class="form-horizontal" method="post" action="javascript:void(null);">
         <div class="form-group col-sm-5"></div>
         <div class="form-group col-sm-7">
             <label class="radio-inline"><input type="radio" value="0" name="private" id="radio1" <?php if ($this->_tpl_vars['ad']->private == 0): ?> checked="" <?php endif; ?>> Частное лицо</label>

@@ -1,9 +1,11 @@
 onload = function () {
-    $('form :checked').each(function () {
-        this.selected = false;
-        this.checked = false;
-    });
-    $('form').trigger('reset');
+    $(':input', '#form')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+    $("select option:first-child").prop('selected', true);
+    $('input[id = radio1]').prop('checked', true);
 }
 
 $(document).ready(function () {
@@ -52,7 +54,7 @@ $(document).ready(function () {
 
     // Сохранение объявления
     $('body').on('click', '#save', function () {
-        var form = $('form').serialize();
+        var form = $('#form').serialize();
         $.post('index.php?id=' + $(this).attr('name'),
                 form,
                 function (response) {
@@ -62,11 +64,13 @@ $(document).ready(function () {
                         $('#container').fadeIn('slow');
                     } else {
                         $('#container').hide();
-                        $('form :checked').each(function () {
-                            this.selected = false;
-                            this.checked = false;
-                        });
-                        $('form').trigger('reset');
+                        $(':input', '#form')
+                                .not(':button, :submit, :reset, :hidden')
+                                .val('')
+                                .removeAttr('checked')
+                                .removeAttr('selected');
+                        $("select option:first-child").prop('selected', true);
+                        $('input[id = radio1]').prop('checked', true);
 
                         var num = $('tr:has(button[id=' + response.id + ']) td:first').html();
                         $('tr:has(button[id=' + response.id + '])').html('<td align="center">' + num + '</td><td>'
@@ -95,7 +99,13 @@ $(document).ready(function () {
                         $('#container').fadeIn('slow');
                     } else {
                         $('#container').hide();
-                        $('form').trigger('reset');
+                        $(':input', '#form')
+                                .not(':button, :submit, :reset, :hidden')
+                                .val('')
+                                .removeAttr('checked')
+                                .removeAttr('selected');
+                        $("select option:first-child").prop('selected', true);
+                        $('input[id = radio1]').prop('checked', true);
                         if ($('table').length == 0) {
                             $('.tablediv').html('<table class="table table-striped table-hover"><thead><tr><th>'
                                     + '<center>#</center></th><th><a href="?sort=title">Название</a></th>'
@@ -128,6 +138,14 @@ $(document).ready(function () {
                     console.log(response.status);
                     tr.fadeOut('slow', function () {
                         $(this).remove();
+                        
+                        $(':input', '#form')
+                                .not(':button, :submit, :reset, :hidden')
+                                .val('')
+                                .removeAttr('checked')
+                                .removeAttr('selected');
+                        $("select option:first-child").prop('selected', true);
+                        $('input[id = radio1]').prop('checked', true);
                     });
                 });
 
