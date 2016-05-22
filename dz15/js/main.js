@@ -15,6 +15,8 @@ $(document).ready(function () {
                         .removeAttr('selected');
                 $("select option:first-child").prop('selected', true);
                 $('input[id = radio1]').prop('checked', true);
+                
+                $('.buttons').html('<button name="create" id="undefined">Создать</button>');
             });
         });
         

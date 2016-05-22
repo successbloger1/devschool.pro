@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-05-22 03:49:32
+<?php /* Smarty version 2.6.25-dev, created on 2016-05-22 04:40:48
          compiled from index.tpl.html */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => 'header.tpl.html', 'smarty_include_vars' => array()));
@@ -102,7 +102,7 @@ unset($_smarty_tpl_vars);
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-6 col-sm-6" align="right">
+            <div class="buttons col-sm-offset-6 col-sm-6" align="right">
                 <?php if (! empty ( $this->_tpl_vars['ad'] ) && isset ( $_GET['id'] )): ?>
                 <input type="submit" value="Сохранить" name="save">
                 <input type="submit" value="Создать новое" formaction="index.php"  name="new">
