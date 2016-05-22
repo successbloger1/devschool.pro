@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-05-16 14:00:03
+<?php /* Smarty version 2.6.25-dev, created on 2016-05-22 03:49:32
          compiled from index.tpl.html */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => 'header.tpl.html', 'smarty_include_vars' => array()));
@@ -10,7 +10,7 @@ unset($_smarty_tpl_vars);
 
 <div class="col-md-5">
     <h2><center>Форма объявления</center></h2>
-    <form  role="form" class="form-horizontal" method="post">
+    <form id="form" role="form" class="form-horizontal" method="post" >
         <div class="form-group col-sm-5"></div>
         <div class="form-group col-sm-7">
             <label class="radio-inline"><input type="radio" value="0" name="private" id="radio1" <?php if ($this->_tpl_vars['ad']->private == 0): ?> checked="" <?php endif; ?>> Частное лицо</label>
@@ -53,7 +53,7 @@ unset($_smarty_tpl_vars);
         <div class="form-group">
             <label for="citys" class="col-sm-4 control-label">Город</label>
             <div class="col-sm-8">
-                <select name="location_id" class="form-control">
+                <select id="location_id" name="location_id" class="form-control">
                     <?php $_from = $this->_tpl_vars['citys']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
     foreach ($_from as $this->_tpl_vars['number'] => $this->_tpl_vars['city']):
 ?> 
@@ -67,7 +67,7 @@ unset($_smarty_tpl_vars);
         <div class="form-group">
             <label for="category" class="col-sm-4 control-label">Категория</label> 
             <div class="col-sm-8" >
-                <select name="category_id" class="form-control">
+                <select id="category_id" name="category_id" class="form-control">
                     <?php $_from = $this->_tpl_vars['category']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
     foreach ($_from as $this->_tpl_vars['number'] => $this->_tpl_vars['categ']):
 ?> 

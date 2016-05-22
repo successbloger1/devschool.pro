@@ -1,13 +1,20 @@
 $(document).ready(function () {
     
-    
-    $('button.delete').on('click', function () {
+    $('body').on('click', 'button.delete',function () {
         var tr = $(this).closest('tr');
         var id = $(this).attr('id');
 
         $.get('index.php?delete=' + id, function () { // success
             tr.fadeOut('slow', function () {
                 $(this).remove();
+                
+                $(':input', '#form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
+                $("select option:first-child").prop('selected', true);
+                $('input[id = radio1]').prop('checked', true);
             });
         });
         
