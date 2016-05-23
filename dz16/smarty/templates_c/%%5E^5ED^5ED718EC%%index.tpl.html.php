@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-05-22 04:11:46
+<?php /* Smarty version 2.6.25-dev, created on 2016-05-23 14:04:45
          compiled from index.tpl.html */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => 'header.tpl.html', 'smarty_include_vars' => array()));
@@ -121,52 +121,15 @@ unset($_smarty_tpl_vars);
 <div class="col-md-7">
     <h2><center>Объявления</center></h2><br>
     <div class="tablediv col-sm-offset-1 col-sm-10">
-        <?php if (is_array ( $this->_tpl_vars['ads_list'] ) && ! empty ( $this->_tpl_vars['ads_list'] )): ?>
-
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th><center>#</center></th>
-                    <th><a href="?sort=title">Название</a></th>
-                    <th><a href="?sort=price">Цена</a></th>
-                    <th>Имя</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php $_from = $this->_tpl_vars['ads_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }$this->_foreach['print'] = array('total' => count($_from), 'iteration' => 0);
-if ($this->_foreach['print']['total'] > 0):
-    foreach ($_from as $this->_tpl_vars['ad_l']):
-        $this->_foreach['print']['iteration']++;
-?>
-            <tr>
-                <td align="center"><?php echo $this->_foreach['print']['iteration']; ?>
-</td>
-                <td><?php echo $this->_tpl_vars['ad_l']->title; ?>
-</td>
-                <td><?php echo $this->_tpl_vars['ad_l']->price; ?>
- руб.</td>
-                <td><?php echo $this->_tpl_vars['ad_l']->seller_name; ?>
-</td>
-                <td>
-                    <button type="button" id="<?php echo $this->_tpl_vars['ad_l']->id; ?>
-" class="delete btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
-                    <button type="button" id="<?php echo $this->_tpl_vars['ad_l']->id; ?>
-" class="edit btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
-                </td>
-            </tr>    
-            <?php endforeach; endif; unset($_from); ?> 
-            </tbody>
-            <tr>
-                <td align="center" colspan="5">
-                    <button type="button" id="0" class="deleteall btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-trash"></span> Удалить все объявления
-                    </button>   
-                </td>
-            </tr>
-        </table>
-
-        <div class="deleteall col-md-12"></div>
+        <?php if ($this->_tpl_vars['ads_rows'] != ''): ?>
+        
+        <?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => 'table.tpl.html', 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+        
+        
         <?php else: ?>
         <div class="deleteall col-md-12">
             <center><p><br>Объявлений нет</p></center>

@@ -101,42 +101,11 @@
 <div class="col-md-7">
     <h2><center>Объявления</center></h2><br>
     <div class="tablediv col-sm-offset-1 col-sm-10">
-        {if is_array($ads_list) && !empty($ads_list)}
-
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th><center>#</center></th>
-                    <th><a href="?sort=title">Название</a></th>
-                    <th><a href="?sort=price">Цена</a></th>
-                    <th>Имя</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-            {foreach from=$ads_list item=ad_l name=print}
-            <tr>
-                <td align="center">{$smarty.foreach.print.iteration}</td>
-                <td>{$ad_l->title}</td>
-                <td>{$ad_l->price} руб.</td>
-                <td>{$ad_l->seller_name}</td>
-                <td>
-                    <button type="button" id="{$ad_l->id}" class="delete btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
-                    <button type="button" id="{$ad_l->id}" class="edit btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
-                </td>
-            </tr>    
-            {/foreach} 
-            </tbody>
-            <tr>
-                <td align="center" colspan="5">
-                    <button type="button" id="0" class="deleteall btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-trash"></span> Удалить все объявления
-                    </button>   
-                </td>
-            </tr>
-        </table>
-
-        <div class="deleteall col-md-12"></div>
+        {if $ads_rows != ''}
+        
+        {include file='table.tpl.html'}
+        
+        
         {else}
         <div class="deleteall col-md-12">
             <center><p><br>Объявлений нет</p></center>

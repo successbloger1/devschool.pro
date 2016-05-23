@@ -49,13 +49,14 @@ class AdsStore {
             $ad = new Ad ($value);
             self::addAds($ad);
         }
+        
+        return $this;
     }
     
     public static function deleteAllAds () {
         global $db;
         
-        $db->query('TRUNCATE TABLE ads');
-        echo json_encode(['status'=>'delete all ads']);
+        return $db->query('TRUNCATE TABLE ads');
     }
     
     public function sortAds ($sort) {
@@ -96,7 +97,17 @@ class AdsStore {
     
     public function printAds(){
         global $smarty;
-
-        $smarty->assign('ads_list', $this->ads);
+        
+        $row = '';
+        $n = 1;
+        foreach($this->ads as $value){
+            $smarty->assign('n', $n);
+            $n++;
+            $smarty->assign('ad', $value);
+            $row .= $smarty->fetch('table_row.tpl.html');
+        }
+        $smarty->assign('ads_rows', $row);
+        
     }
+    
 }

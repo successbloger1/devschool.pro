@@ -1,11 +1,18 @@
-onload = function () {
+function clean() {
     $(':input', '#form')
-            .not(':button, :submit, :reset, :hidden')
+            .not(':button, :submit, :reset, #dispatch, input[type = radio]')
             .val('')
-            .removeAttr('checked')
             .removeAttr('selected');
     $("select option:first-child").prop('selected', true);
-    $('input[id = radio1]').prop('checked', true);
+    $('input[id = radio1]').prop('checked', true).attr('checked');
+    $('#radio2').removeAttr('checked');
+    $('#dispatch').removeAttr('checked');
+    
+    $('.buttons').html('<button name="create" id="create">Создать</button>');
+}
+
+onload = function () {
+    clean();
 }
 
 $(document).ready(function () {
@@ -22,32 +29,32 @@ $(document).ready(function () {
     // Редактирование объявления
     $('body').on('click', '.edit', function () {
         var tr = $(this).closest('tr');
-        var id = {'id': $(this).attr('id')};
+        var id = {'action': 'edit', 'id': $(this).attr('id')};
 
-        $.getJSON('index.php',
+        $.getJSON('ajax_controller.php',
                 id,
                 function (response) { // success
-                    console.log(response.status);
-                    if (response.private == 0) {
-                        $('input[id = radio1]').prop('checked', true);
+                    console.log(response.message);
+                    if (response.data.private == 0) {
+                        $('input[id = radio1]').prop('checked', true).attr('checked');
                         $('#radio2').removeAttr('checked');
-                    } else if (response.private == 1) {
-                        $('input[id = radio2]').prop('checked', true);
+                    } else if (response.data.private == 1) {
+                        $('input[id = radio2]').prop('checked', true).attr('checked');
                         $('#radio1').removeAttr('checked');
                     }
-                    $('#seller_name').val(response.seller_name);
-                    $('#email').val(response.email);
-                    if (response.allow_mails != '') {
-                        $('#dispatch').prop('checked', true);
+                    $('#seller_name').val(response.data.seller_name);
+                    $('#email').val(response.data.email);
+                    if (response.data.allow_mails != '') {
+                        $('#dispatch').prop('checked', true).attr('checked');
                     }
-                    $('#phone').val(response.phone);
-                    $('#location_id option[value =' + response.location_id + ']').prop('selected', true);
-                    $('#category_id option[value =' + response.category_id + ']').prop('selected', true);
-                    $('#title').val(response.title);
-                    $('#description').val(response.description);
-                    $('#price').val(response.price);
+                    $('#phone').val(response.data.phone);
+                    $('#location_id option[value =' + response.data.location_id + ']').prop('selected', true);
+                    $('#category_id option[value =' + response.data.category_id + ']').prop('selected', true);
+                    $('#title').val(response.data.title);
+                    $('#description').val(response.data.description);
+                    $('#price').val(response.data.price);
 
-                    $('.buttons').html('<button name="' + response.id + '" id="save">Сохранить</button>'
+                    $('.buttons').html('<button name="' + response.data.id + '" id="save">Сохранить</button>'
                             + '<input type="submit" value="Создать новое" formaction="index.php"  name="new" id="new">');
                 });
     });
@@ -55,7 +62,7 @@ $(document).ready(function () {
     // Сохранение объявления
     $('body').on('click', '#save', function () {
         var form = $('#form').serialize();
-        $.post('index.php?id=' + $(this).attr('name'),
+        $.post('ajax_controller.php?action=save&id=' + $(this).attr('name'),
                 form,
                 function (response) {
                     if (response.status == 'error') {
@@ -64,24 +71,13 @@ $(document).ready(function () {
                         $('#container').fadeIn('slow');
                     } else {
                         $('#container').hide();
-                        $(':input', '#form')
-                                .not(':button, :submit, :reset, :hidden')
-                                .val('')
-                                .removeAttr('checked')
-                                .removeAttr('selected');
-                        $("select option:first-child").prop('selected', true);
-                        $('input[id = radio1]').prop('checked', true);
+                        clean();
 
-                        var num = $('tr:has(button[id=' + response.id + ']) td:first').html();
-                        $('tr:has(button[id=' + response.id + '])').html('<td align="center">' + num + '</td><td>'
-                                + response.title + '</td><td>' + response.price + ' руб.</td><td>'
-                                + response.seller_name + '</td><td><button type="button" id="'
-                                + response.id + '" class="delete btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></button> '
-                                + ' <button type="button" id="' + response.id + '" class="edit btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>');
+                        var num = $('tr:has(button[id=' + response.data.id + ']) td:first').html();
+                        $('tr:has(button[id=' + response.data.id + '])').replaceWith(response.row);
+                        $('tr:has(button[id=' + response.data.id + ']) td:first').html(num);
 
-                        $('.buttons').html('<button name="create" id="create">Создать</button>');
-
-                        console.log('edited ad with id = ' + response.id);
+                        console.log(response.message);
                     }
                 },
                 'json');
@@ -90,7 +86,7 @@ $(document).ready(function () {
     // Создание нового объявления
     $('body').on('click', '#create', function () {
         var form = $('form').serialize();
-        $.post('index.php',
+        $.post('ajax_controller.php?action=create',
                 form,
                 function (response) {
                     if (response.status == 'error') {
@@ -99,29 +95,15 @@ $(document).ready(function () {
                         $('#container').fadeIn('slow');
                     } else {
                         $('#container').hide();
-                        $(':input', '#form')
-                                .not(':button, :submit, :reset, :hidden')
-                                .val('')
-                                .removeAttr('checked')
-                                .removeAttr('selected');
-                        $("select option:first-child").prop('selected', true);
-                        $('input[id = radio1]').prop('checked', true);
+                        clean();
+                        
                         if ($('table').length == 0) {
-                            $('.tablediv').html('<table class="table table-striped table-hover"><thead><tr><th>'
-                                    + '<center>#</center></th><th><a href="?sort=title">Название</a></th>'
-                                    + '<th><a href="?sort=price">Цена</a></th><th>Имя</th><th>Действия</th>'
-                                    + '</tr></thead><tbody></tbody><tr><td align="center" colspan="5">'
-                                    + '<button type="button" id="0" class="deleteall btn btn-default btn-sm">'
-                                    + '<span class="glyphicon glyphicon-trash"></span> Удалить все объявления'
-                                    + '</button></td></tr></table><div class="deleteall col-md-12"></div>');
+                            $('.tablediv').html(response.table);
                         }
                         var num = parseInt($('tbody tr:eq(-2) td:first').html() != undefined ? $('tbody tr:eq(-2) td:first').html() : 0) + 1;
-                        $('tbody tr:last').before('<tr><td align="center">' + num + '</td><td>'
-                                + response.title + '</td><td>' + response.price + ' руб.</td><td>'
-                                + response.seller_name + '</td><td><button type="button" id="'
-                                + response.id + '" class="delete btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></button> '
-                                + ' <button type="button" id="' + response.id + '" class="edit btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td></tr>');
-                        console.log('added ad with id = ' + response.id);
+                        $('#ads>tbody').append(response.row);
+                        $('tbody tr:eq(-2) td:first').html(num);
+                        console.log(response.message);
                     }
                 },
                 'json');
@@ -130,22 +112,16 @@ $(document).ready(function () {
     // Удаление выбранного объявления
     $('body').on('click', 'button.delete', function () {
         var tr = $(this).closest('tr');
-        var id = {'delete': $(this).attr('id')};
+        var id = {'action' : 'delete', 'id' : $(this).attr('id')};
 
-        $.getJSON('index.php',
+        $.getJSON('ajax_controller.php',
                 id,
                 function (response) { // success
-                    console.log(response.status);
+                    console.log(response.message);
                     tr.fadeOut('slow', function () {
                         $(this).remove();
                         
-                        $(':input', '#form')
-                                .not(':button, :submit, :reset, :hidden')
-                                .val('')
-                                .removeAttr('checked')
-                                .removeAttr('selected');
-                        $("select option:first-child").prop('selected', true);
-                        $('input[id = radio1]').prop('checked', true);
+                        clean();
                     });
                 });
 
@@ -157,12 +133,12 @@ $(document).ready(function () {
 
     //Удаление всех объявлений
     $('body').on('click', 'button.deleteall', function () {
-        var id = {'delete': $(this).attr('id')};
+        var id = {'action' : 'delete', 'id' : $(this).attr('id')};
 
-        $.getJSON('index.php',
+        $.getJSON('ajax_controller.php',
                 id,
                 function (response) {
-                    console.log(response.status);
+                    console.log(response.message);
                     delTable();
                 });
     });
