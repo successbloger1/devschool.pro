@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-05-19 13:01:17
+<?php /* Smarty version 2.6.25-dev, created on 2016-05-24 07:08:22
          compiled from footer.tpl.html */ ?>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
