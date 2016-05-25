@@ -1,0 +1,15 @@
+Д.З.
+Подсветить нужно 
+1. Все ссылки с текстом Css которые находятся в списке 
+$("li > a:contains('CSS')").addClass("wrappedElement");
+
+2. 3 и 4 картинки 
+$("img:nth-child(3), img:nth-child(4)").addClass("wrappedElement");
+
+3. 1 и 2 строки в таблице (заголовок не учитывать) 
+$("table#languages tbody tr:nth-child(1), table#languages tbody tr:nth-child(2)").addClass("wrappedElement");
+или
+$("table#languages tbody tr:contains('199')").addClass("wrappedElement")
+
+4. В последней строке таблицы подсветить ячейку второй колонки
+$("table#languages tbody tr:last td:nth-child(2)").addClass("wrappedElement");
