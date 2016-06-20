@@ -25,6 +25,15 @@ class AdsStore {
             return self::$instance;
     }
     
+//    public function newAdd(array $data){
+//        if ($data['private'] == 0)
+//            $ad = new Ad($data);
+//        else
+//            $ad = new CompanyAd($data);
+//        
+//        $this->addAds($ad);
+//    }
+
     public function addAds(Ad $ad) {
        if(!($this instanceof AdsStore)){
            die("Нельзя использовать этот метод в конструкторе классов");
@@ -46,7 +55,11 @@ class AdsStore {
         $all = $db->select('SELECT * FROM ads');
         
         foreach ($all as $value) {
-            $ad = new Ad ($value);
+            if ($value['private'] == 0)
+                $ad = new Ad ($value);
+            else 
+                $ad = new CompanyAd ($value);
+
             self::addAds($ad);
         }
         
@@ -101,6 +114,11 @@ class AdsStore {
         $row = '';
         $n = 1;
         foreach($this->ads as $value){
+            if ($value instanceof CompanyAd) {
+                $smarty->assign('color', $value->getColor());
+            } else {
+                $smarty->assign('color', '');
+            }
             $smarty->assign('n', $n);
             $n++;
             $smarty->assign('ad', $value);

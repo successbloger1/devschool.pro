@@ -1,4 +1,4 @@
-            <tr>
+            <tr {if isset($color)} style="background: {$color}" {/if}>
                 <td align="center">{$n}</td>
                 <td>{$ad->title}</td>
                 <td>{$ad->price} руб.</td>

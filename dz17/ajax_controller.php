@@ -29,8 +29,13 @@ switch ($_GET['action']) {
     case "insert": {
 
             $data = $_POST;
-
-            $ad = new Ad($data);
+            
+//            $main->newAdd($data);
+            
+            if ($data['private'] == 0)
+                $ad = new Ad($data);
+            else
+                $ad = new CompanyAd($data);
 
             if ($ad->getErrors() != '') {
                 $result['status'] = 'error';
@@ -41,6 +46,8 @@ switch ($_GET['action']) {
                 $result['message'] = 'Обяъвление ' . $ad->id . ' добавлено успешно';
                 $result['data'] = $ad;
                 $smarty->assign('ad', $ad);
+                if ($ad instanceof CompanyAd) 
+                    $smarty->assign('color', $ad->getColor());
                 $result['row'] = $smarty->fetch('table_row.tpl.html');
                 $result['table'] = $smarty->fetch('table.tpl.html');
             }
